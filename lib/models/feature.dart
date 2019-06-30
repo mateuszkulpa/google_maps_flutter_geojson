@@ -1,11 +1,13 @@
 import 'geometry.dart';
 import 'package:json_annotation/json_annotation.dart';
+
+import 'properties.dart';
 part 'feature.g.dart';
 
 @JsonSerializable(createToJson: false)
 class Feature {
   final String type;
-  final Map<String, dynamic> properties;
+  final Propetries properties;
   final Geometry geometry;
 
   Feature(this.type, this.properties, this.geometry);
