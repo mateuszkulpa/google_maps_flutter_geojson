@@ -1,14 +1,41 @@
 # google_maps_flutter_geojson
 
-A new Flutter package project.
+Simple library allows to display map layers based on geojson format data.
+Supported geojson layers:
+-  LineString
+-  Polygon
+-  Point
 
-## Getting Started
+## Installation
 
-This project is a starting point for a Dart
-[package](https://flutter.dev/developing-packages/),
-a library module containing code that can be shared easily across
-multiple Flutter or Dart projects.
+import the library in pubspec.yaml. Now this is the only way to use the library.
 
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.dev/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+```yaml
+google_maps_flutter_geojson:
+    git: https://github.com/mateuszkulpa/google_maps_flutter_geojson.git
+```
+
+## Usage
+
+```dart
+import 'package:google_maps_flutter_geojson/google_maps_flutter_geojson.dart';
+
+// convert your geojson to google maps layers
+var layers = GeoJSONGoogleMapsResult.fromJson(jsonDecode("YOUR GEOJSON"));
+
+// use it in your GoogleMap widget
+GoogleMap(
+    // ...
+    polygons: Set.of(result.polygons),
+    polylines: Set.of(result.polylines),
+    markers: Set.of(result.markers),
+)
+```
+
+## Contributing
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+Please make sure to update tests as appropriate.
+
+## License
+[MIT](https://choosealicense.com/licenses/mit/)
