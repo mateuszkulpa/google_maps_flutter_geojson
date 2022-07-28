@@ -67,15 +67,23 @@ class GeoJSONGoogleMapsResult {
       strokeColor = strokeColor.withOpacity(feature.properties.strokeOpacity!);
     }
 
-    final coordinates = (feature.geometry as internalModels.Polygon).coordinates;
-    final points = coordinates.first.map((x) => LatLng(x[1], x[0])).toList();
-    List<List<LatLng>> holes = [[]];
-    if (coordinates.length > 1) {
-      holes = coordinates.sublist(1)
-          .map<List<LatLng>>((h) => h
+    late List<LatLng> points;
+    List<List<LatLng>> holes = [];
+    if (feature.geometry is internalModels.MultiPolygon) {
+      ///coordinates: [[[[0, 0], [1, 1], [0, 1], [0, 0]]]]}
+      final coordinates = (feature.geometry as internalModels.MultiPolygon).coordinates;
+      points = coordinates.first.first.map((x) => LatLng(x[1], x[0])).toList();
+      if (coordinates.first.length > 1) {
+        holes = coordinates.first.sublist(1)
+            .map<List<LatLng>>((h) => h
             .map((p) => LatLng(p[1], p[0]))
-          .toList()
+            .toList()
         ).toList();
+      }
+
+    } else {
+      final coordinates = (feature.geometry as internalModels.Polygon).coordinates;
+      points = coordinates.first.map((x) => LatLng(x[1], x[0])).toList();
     }
 
     return Polygon(

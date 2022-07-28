@@ -11,7 +11,9 @@ MultiPolygon _$MultiPolygonFromJson(Map<String, dynamic> json) => MultiPolygon(
       (json['coordinates'] as List<dynamic>)
           .map((e) => (e as List<dynamic>)
               .map((e) => (e as List<dynamic>)
-                  .map((e) => (e as num).toDouble())
+                  .map((e) => (e as List<dynamic>)
+                      .map((e) => (e as num).toDouble())
+                      .toList())
                   .toList())
               .toList())
           .toList(),
