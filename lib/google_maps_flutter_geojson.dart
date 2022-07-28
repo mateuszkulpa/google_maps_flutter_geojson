@@ -89,7 +89,7 @@ class GeoJSONGoogleMapsResult {
     return Polygon(
       polygonId: PolygonId(Uuid().v4()),
       fillColor: fillColor,
-      strokeWidth: feature.properties.strokeWidth?.toInt() ?? 10,
+      strokeWidth: feature.properties.strokeWidth?.toInt() ?? 1,
       strokeColor: strokeColor,
       points: points,
       holes: holes,
@@ -120,7 +120,7 @@ class GeoJSONGoogleMapsResult {
     return Polyline(
         polylineId: PolylineId(Uuid().v4()),
         color: strokeColor,
-        width: feature.properties.strokeWidth?.toInt() ?? 10,
+        width: feature.properties.strokeWidth?.toInt() ?? 1,
         points: cords.map((x) => LatLng(x[1], x[0])).toList()
     );
   }
