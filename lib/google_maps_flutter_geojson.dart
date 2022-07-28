@@ -22,7 +22,10 @@ class GeoJSONGoogleMapsResult {
 
   factory GeoJSONGoogleMapsResult.fromJson(Map<String, dynamic> json) {
     var parsedJson = GeoJSONParser.parse(json);
+    return GeoJSONGoogleMapsResult.fromGeoJson(parsedJson);
+  }
 
+  factory GeoJSONGoogleMapsResult.fromGeoJson(GeoJSON parsedJson) {
     var polygons = parsedJson.features
         .where((x) => x.geometry is internalModels.Polygon)
         .map<Polygon>((x) => _featureToGooglePolygon(x))
