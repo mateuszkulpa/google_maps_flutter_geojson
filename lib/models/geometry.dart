@@ -16,7 +16,7 @@ abstract class Geometry {
         return LineString.fromJson(json);
       case 'Polygon':
         return Polygon.fromJson(json);
-      case 'Multipolygon':
+      case 'MultiPolygon':
         return MultiPolygon.fromJson(json);
       default:
         throw Exception('Cannot parse geojson');
