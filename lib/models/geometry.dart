@@ -3,7 +3,7 @@
 import 'package:google_maps_flutter_geojson/models/models.dart';
 
 abstract class Geometry {
-  final String type;
+  final String? type;
 
   Geometry(this.type);
 

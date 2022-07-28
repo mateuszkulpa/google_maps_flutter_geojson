@@ -4,8 +4,8 @@ part 'polygon.g.dart';
 
 @JsonSerializable(createToJson: false)
 class Polygon extends Geometry {
-  final List<List<List<double>>> coordinates;
-  Polygon(String type, this.coordinates) : super(type);
+  final List<List<List<double>>>? coordinates;
+  Polygon(String? type, this.coordinates) : super(type);
   
   factory Polygon.fromJson(Map<String, dynamic> json) =>
       _$PolygonFromJson(json);

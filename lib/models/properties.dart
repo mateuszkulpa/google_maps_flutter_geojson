@@ -4,17 +4,17 @@ part 'properties.g.dart';
 @JsonSerializable(createToJson: false)
 class Propetries {
   @JsonKey(name: 'name')
-  final String name;
+  final String? name;
   @JsonKey(name: 'stroke')
-  final String stroke;
+  final String? stroke;
   @JsonKey(name: 'stroke-width')
-  final double strokeWidth;
+  final double? strokeWidth;
   @JsonKey(name: 'stroke-opacity')
-  final double strokeOpacity;
+  final double? strokeOpacity;
   @JsonKey(name: 'fill')
-  final String fill;
+  final String? fill;
   @JsonKey(name: 'fill-opacity')
-  final double fillOpacity;
+  final double? fillOpacity;
 
   Propetries(this.name, this.stroke, this.strokeWidth, this.strokeOpacity, this.fill,
       this.fillOpacity);

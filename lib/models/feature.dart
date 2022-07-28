@@ -6,9 +6,9 @@ part 'feature.g.dart';
 
 @JsonSerializable(createToJson: false)
 class Feature {
-  final String type;
-  final Propetries properties;
-  final Geometry geometry;
+  final String? type;
+  final Propetries? properties;
+  final Geometry? geometry;
 
   Feature(this.type, this.properties, this.geometry);
 
