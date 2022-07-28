@@ -17,8 +17,8 @@ void main() {
 
   test('Parse and convert to google maps items', () {
     var result = GeoJSONGoogleMapsResult.fromJson(jsonDecode(sampleJson));
-    expect(result.polygons?.length, 1);
-    expect(result.polylines?.length, 1);
-    expect(result.markers?.length, 2);
+    expect(result.polygons.length, 1);
+    expect(result.polylines.length, 1);
+    expect(result.markers.length, 2);
   });
 }

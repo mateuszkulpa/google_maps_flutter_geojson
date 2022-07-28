@@ -14,9 +14,9 @@ class GeoJSONParser {
 }
 
 class GeoJSONGoogleMapsResult {
-  final List<Polygon>? polygons;
-  final List<Marker>? markers;
-  final List<Polyline>? polylines;
+  final List<Polygon> polygons;
+  final List<Marker> markers;
+  final List<Polyline> polylines;
 
   GeoJSONGoogleMapsResult(this.polygons, this.markers, this.polylines);
 
@@ -26,17 +26,17 @@ class GeoJSONGoogleMapsResult {
     var polygons = parsedJson.features
         ?.where((x) => x.geometry is internalModels.Polygon)
         .map<Polygon>((x) => _featureToGooglePolygon(x))
-        .toList();
+        .toList() ?? [];
 
     var markers = parsedJson.features
         ?.where((x) => x.geometry is internalModels.Point)
         .map<Marker>((x) => _featureToGoogleMarker(x))
-        .toList();
+        .toList() ?? [];
 
     var polylines = parsedJson.features
         ?.where((x) => x.geometry is internalModels.LineString)
         .map<Polyline>((x) => _featureToGooglePolyline(x))
-        .toList();
+        .toList() ?? [];
 
     return GeoJSONGoogleMapsResult(polygons, markers, polylines);
   }
