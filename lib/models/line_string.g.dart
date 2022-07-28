@@ -7,9 +7,9 @@ part of 'line_string.dart';
 // **************************************************************************
 
 LineString _$LineStringFromJson(Map<String, dynamic> json) => LineString(
-      json['type'] as String?,
-      (json['coordinates'] as List<dynamic>?)
-          ?.map((e) =>
+      json['type'] as String,
+      (json['coordinates'] as List<dynamic>)
+          .map((e) =>
               (e as List<dynamic>).map((e) => (e as num).toDouble()).toList())
           .toList(),
     );

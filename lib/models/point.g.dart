@@ -7,8 +7,8 @@ part of 'point.dart';
 // **************************************************************************
 
 Point _$PointFromJson(Map<String, dynamic> json) => Point(
-      json['type'] as String?,
-      (json['coordinates'] as List<dynamic>?)
-          ?.map((e) => (e as num).toDouble())
+      json['type'] as String,
+      (json['coordinates'] as List<dynamic>)
+          .map((e) => (e as num).toDouble())
           .toList(),
     );

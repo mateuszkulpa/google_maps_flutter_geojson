@@ -6,7 +6,7 @@ part of 'properties.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Propetries _$PropetriesFromJson(Map<String, dynamic> json) => Propetries(
+Properties _$PropertiesFromJson(Map<String, dynamic> json) => Properties(
       json['name'] as String?,
       json['stroke'] as String?,
       (json['stroke-width'] as num?)?.toDouble(),

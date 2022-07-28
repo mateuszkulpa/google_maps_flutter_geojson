@@ -2,7 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'properties.g.dart';
 
 @JsonSerializable(createToJson: false)
-class Propetries {
+class Properties {
   @JsonKey(name: 'name')
   final String? name;
   @JsonKey(name: 'stroke')
@@ -16,9 +16,9 @@ class Propetries {
   @JsonKey(name: 'fill-opacity')
   final double? fillOpacity;
 
-  Propetries(this.name, this.stroke, this.strokeWidth, this.strokeOpacity, this.fill,
+  Properties(this.name, this.stroke, this.strokeWidth, this.strokeOpacity, this.fill,
       this.fillOpacity);
 
-  factory Propetries.fromJson(Map<String, dynamic> json) =>
-      _$PropetriesFromJson(json);
+  factory Properties.fromJson(Map<String, dynamic> json) =>
+      _$PropertiesFromJson(json);
 }

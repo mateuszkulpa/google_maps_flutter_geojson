@@ -4,8 +4,8 @@ part 'point.g.dart';
 
 @JsonSerializable(createToJson: false)
 class Point extends Geometry {
-  final List<double>? coordinates;
-  Point(String? type, this.coordinates) : super(type);
+  final List<double> coordinates;
+  Point(String type, this.coordinates) : super(type);
 
   factory Point.fromJson(Map<String, dynamic> json) => _$PointFromJson(json);
 }

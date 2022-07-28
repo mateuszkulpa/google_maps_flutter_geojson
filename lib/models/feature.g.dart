@@ -7,11 +7,7 @@ part of 'feature.dart';
 // **************************************************************************
 
 Feature _$FeatureFromJson(Map<String, dynamic> json) => Feature(
-      json['type'] as String?,
-      json['properties'] == null
-          ? null
-          : Propetries.fromJson(json['properties'] as Map<String, dynamic>),
-      json['geometry'] == null
-          ? null
-          : Geometry.fromJson(json['geometry'] as Map<String, dynamic>),
+      json['type'] as String,
+      Properties.fromJson(json['properties'] as Map<String, dynamic>),
+      Geometry.fromJson(json['geometry'] as Map<String, dynamic>),
     );

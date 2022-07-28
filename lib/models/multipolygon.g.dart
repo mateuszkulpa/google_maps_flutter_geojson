@@ -1,12 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'polygon.dart';
+part of 'multipolygon.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-Polygon _$PolygonFromJson(Map<String, dynamic> json) => Polygon(
+MultiPolygon _$MultiPolygonFromJson(Map<String, dynamic> json) => MultiPolygon(
       json['type'] as String,
       (json['coordinates'] as List<dynamic>)
           .map((e) => (e as List<dynamic>)

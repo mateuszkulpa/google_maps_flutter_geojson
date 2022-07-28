@@ -9,10 +9,10 @@ const sampleJson =
 void main() {
   test('Parse geojson sample', () {
     var result = GeoJSONParser.parse(jsonDecode(sampleJson));
-    expect(result.features![0].geometry is Point, true);
-    expect( result.features![1].geometry is Point, true);
-    expect(result.features![2].geometry is LineString, true);
-    expect(result.features![3].geometry is Polygon, true);
+    expect(result.features[0].geometry is Point, true);
+    expect( result.features[1].geometry is Point, true);
+    expect(result.features[2].geometry is LineString, true);
+    expect(result.features[3].geometry is Polygon, true);
   });
 
   test('Parse and convert to google maps items', () {
