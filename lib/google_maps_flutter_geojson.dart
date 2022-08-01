@@ -33,7 +33,7 @@ class GeoJSONGoogleMapsResult {
 
     var multipolygons = parsedJson.features
         .where((x) => x.geometry is internalModels.MultiPolygon)
-        .map<Polygon>((x) => _featureToGooglePolygon(x))
+        .expand<Polygon>((x) => _multiPolygonToGooglePolygon(x))
         .toList();
 
     polygons.addAll(multipolygons);
@@ -70,24 +70,16 @@ class GeoJSONGoogleMapsResult {
       strokeColor = strokeColor.withOpacity(feature.properties.strokeOpacity!);
     }
 
-    late List<LatLng> points;
-    List<List<LatLng>> holes = [];
-    if (feature.geometry is internalModels.MultiPolygon) {
-      ///coordinates: [[[[0, 0], [1, 1], [0, 1], [0, 0]]]]}
-      final coordinates = (feature.geometry as internalModels.MultiPolygon).coordinates;
-      points = coordinates.first.first.map((x) => LatLng(x[1], x[0])).toList();
-      if (coordinates.first.length > 1) {
-        holes = coordinates.first.sublist(1)
-            .map<List<LatLng>>((h) => h
-            .map((p) => LatLng(p[1], p[0]))
-            .toList()
-        ).toList();
-      }
-
-    } else {
-      final coordinates = (feature.geometry as internalModels.Polygon).coordinates;
-      points = coordinates.first.map((x) => LatLng(x[1], x[0])).toList();
-    }
+    final coordinates = (feature.geometry as internalModels.Polygon).coordinates;
+    final points = coordinates.first.map((x) => LatLng(x[1], x[0])).toList();
+    final List<List<LatLng>> holes = coordinates.length > 1
+        ? coordinates.sublist(1)
+        .map<List<LatLng>>(
+            (h) => h.map<LatLng>(
+              (p) => LatLng(p[1], p[0])
+            ).toList()
+          ).toList()
+        : [];
 
     return Polygon(
       polygonId: PolygonId(Uuid().v4()),
@@ -97,6 +89,49 @@ class GeoJSONGoogleMapsResult {
       points: points,
       holes: holes,
     );
+  }
+
+  static Set<Polygon> _multiPolygonToGooglePolygon(internalModels.Feature feature) {
+    // Set fill color
+    Color fillColor = Colors.black.withOpacity(0.15);
+    if (feature.properties.fill != null) {
+      fillColor = HexColor(feature.properties.fill!);
+    }
+    if (feature.properties.fillOpacity != null) {
+      fillColor = fillColor.withOpacity(feature.properties.fillOpacity!);
+    }
+
+    // Set stroke color
+    Color strokeColor = Colors.black.withOpacity(0.5);
+    if (feature.properties.stroke != null) {
+      strokeColor = HexColor(feature.properties.stroke!);
+    }
+    if (feature.properties.strokeOpacity != null) {
+      strokeColor = strokeColor.withOpacity(feature.properties.strokeOpacity!);
+    }
+
+    final coordinates = (feature.geometry as internalModels.MultiPolygon).coordinates;
+
+    return coordinates.map<Polygon>((polygon) {
+      final points = polygon.first.map((x) => LatLng(x[1], x[0])).toList();
+      final List<List<LatLng>> holes = polygon.length > 1
+          ? polygon.sublist(1)
+          .map<List<LatLng>>(
+              (h) => h.map<LatLng>(
+                  (p) => LatLng(p[1], p[0])
+          ).toList()
+      ).toList()
+          : [];
+
+       return Polygon(
+        polygonId: PolygonId(Uuid().v4()),
+        fillColor: fillColor,
+        strokeWidth: feature.properties.strokeWidth?.toInt() ?? 1,
+        strokeColor: strokeColor,
+        points: points,
+        holes: holes,
+      );
+    }).toSet();
   }
 
   static Marker _featureToGoogleMarker(internalModels.Feature feature) {
