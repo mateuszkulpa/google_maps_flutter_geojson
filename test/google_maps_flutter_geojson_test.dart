@@ -38,11 +38,11 @@ void main() {
 
   test('Parse empty multipolygon', () {
     var result = GeoJSONGoogleMapsResult.fromJson(jsonDecode(emptyMultipolygon));
-    expect(result.polygons.length, 2);
+    expect(result.polygons.length, 1);
   });
 
   test('Parse Google crop coverage', () {
     var result = GeoJSONGoogleMapsResult.fromJson(jsonDecode(googleCropCover));
-    expect(result.polygons.length, 20);
+    expect(result.polygons.length, 18);
   });
 }
