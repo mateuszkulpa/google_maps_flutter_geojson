@@ -113,7 +113,8 @@ class GeoJSONGoogleMapsResult {
     final coordinates = (feature.geometry as internalModels.MultiPolygon).coordinates;
 
     return coordinates.map<Polygon>((polygon) {
-      final points = polygon.first.map((x) => LatLng(x[1], x[0])).toList();
+      final points = polygon.isEmpty ? <LatLng>[]
+          : polygon.first.map((x) => LatLng(x[1], x[0])).toList();
       final List<List<LatLng>> holes = polygon.length > 1
           ? polygon.sublist(1)
           .map<List<LatLng>>(
