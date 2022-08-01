@@ -7,10 +7,11 @@ part of 'properties.dart';
 // **************************************************************************
 
 Properties _$PropertiesFromJson(Map<String, dynamic> json) => Properties(
-      json['name'] as String?,
+      json['title'] as String?,
       json['stroke'] as String?,
       (json['stroke-width'] as num?)?.toDouble(),
       (json['stroke-opacity'] as num?)?.toDouble(),
       json['fill'] as String?,
       (json['fill-opacity'] as num?)?.toDouble(),
+      json['description'] as String?,
     );

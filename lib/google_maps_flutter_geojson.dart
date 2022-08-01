@@ -138,7 +138,7 @@ class GeoJSONGoogleMapsResult {
     var cords = (feature.geometry as internalModels.Point).coordinates;
     return Marker(
       markerId: MarkerId(Uuid().v4()),
-      infoWindow: feature.properties.name != null ? InfoWindow(title: feature.properties.name) : InfoWindow.noText,
+      infoWindow: feature.properties.title != null ? InfoWindow(title: feature.properties.title) : InfoWindow.noText,
       position: LatLng(cords[1], cords[0]),
     );
   }
