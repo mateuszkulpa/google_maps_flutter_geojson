@@ -44,6 +44,8 @@ class GeoJSONGoogleMapsResult {
     final Map<Polyline, internalModels.Feature> _lineFeatures = {};
     var polygons = parsedJson.features
         .where((x) => x.geometry is internalModels.Polygon)
+        .where((x) => (x.geometry as internalModels.Polygon)
+          .coordinates.isNotEmpty)
         .map<Polygon>((x) {
             final p = _featureToGooglePolygon(x);
             _polygonFeatures[p] = x;
@@ -53,6 +55,8 @@ class GeoJSONGoogleMapsResult {
 
     var multipolygons = parsedJson.features
         .where((x) => x.geometry is internalModels.MultiPolygon)
+        .where((x) => (x.geometry as internalModels.MultiPolygon)
+           .coordinates.isNotEmpty)
         .expand<Polygon>((x) {
           final p = _multiPolygonToGooglePolygon(x);
           p.forEach((p) => _polygonFeatures[p] = x);
