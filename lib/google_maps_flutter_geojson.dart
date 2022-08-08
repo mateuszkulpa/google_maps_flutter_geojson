@@ -18,7 +18,20 @@ class GeoJSONGoogleMapsResult {
   final List<Marker> markers;
   final List<Polyline> polylines;
 
-  GeoJSONGoogleMapsResult(this.polygons, this.markers, this.polylines);
+  /// A lookup map of the polygon to feature
+  final Map<Polygon, internalModels.Feature> polygonFeatures;
+
+  /// A lookup map of the marker to feature
+  final Map<Marker, internalModels.Feature> markerFeatures;
+
+  /// A lookup map of the line to feature
+  final Map<Polyline, internalModels.Feature> lineFeatures;
+
+  GeoJSONGoogleMapsResult(this.polygons, this.markers, this.polylines, {
+    this.polygonFeatures = const {},
+    this.markerFeatures = const {},
+    this.lineFeatures = const {},
+  });
 
   factory GeoJSONGoogleMapsResult.fromJson(Map<String, dynamic> json) {
     var parsedJson = GeoJSONParser.parse(json);
@@ -26,29 +39,52 @@ class GeoJSONGoogleMapsResult {
   }
 
   factory GeoJSONGoogleMapsResult.fromGeoJson(GeoJSON parsedJson) {
+    final Map<Polygon, internalModels.Feature> _polygonFeatures = {};
+    final Map<Marker, internalModels.Feature> _markerFeatures = {};
+    final Map<Polyline, internalModels.Feature> _lineFeatures = {};
     var polygons = parsedJson.features
         .where((x) => x.geometry is internalModels.Polygon)
-        .map<Polygon>((x) => _featureToGooglePolygon(x))
+        .map<Polygon>((x) {
+            final p = _featureToGooglePolygon(x);
+            _polygonFeatures[p] = x;
+            return p;
+        })
         .toList();
 
     var multipolygons = parsedJson.features
         .where((x) => x.geometry is internalModels.MultiPolygon)
-        .expand<Polygon>((x) => _multiPolygonToGooglePolygon(x))
+        .expand<Polygon>((x) {
+          final p = _multiPolygonToGooglePolygon(x);
+          p.forEach((p) => _polygonFeatures[p] = x);
+          return p;
+        })
         .toList();
 
     polygons.addAll(multipolygons);
 
     var markers = parsedJson.features
         .where((x) => x.geometry is internalModels.Point)
-        .map<Marker>((x) => _featureToGoogleMarker(x))
+        .map<Marker>((x) {
+          final m = _featureToGoogleMarker(x);
+          _markerFeatures[m] = x;
+          return m;
+        })
         .toList();
 
     var polylines = parsedJson.features
         .where((x) => x.geometry is internalModels.LineString)
-        .map<Polyline>((x) => _featureToGooglePolyline(x))
+        .map<Polyline>((x) {
+          final l = _featureToGooglePolyline(x);
+          _lineFeatures[l] = x;
+          return l;
+        })
         .toList();
 
-    return GeoJSONGoogleMapsResult(polygons, markers, polylines);
+    return GeoJSONGoogleMapsResult(polygons, markers, polylines,
+      polygonFeatures: _polygonFeatures,
+      markerFeatures: _markerFeatures,
+      lineFeatures: _lineFeatures
+    );
   }
 
   static Polygon _featureToGooglePolygon(internalModels.Feature feature) {
