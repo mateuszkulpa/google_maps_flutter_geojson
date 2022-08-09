@@ -1,47 +1,89 @@
 library google_maps_flutter_geojson;
 
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter_geojson/models/simple_properties.dart';
 import 'package:google_maps_flutter_geojson/utils/hex_color.dart';
 import 'package:uuid/uuid.dart';
+import 'models/custom_geojson.dart';
 import 'models/geojson.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'models/models.dart' as internalModels;
+import 'models/properties.dart';
 
 class GeoJSONParser {
+  /// The generic parse uses the [SimpleProperty]
   static GeoJSON parse(Map<String, dynamic> json) {
-    return GeoJSON.fromJson(json);
+    return GeoJSON.fromJson(json); }
+
+  /// A custom parser accepting [T] types extending [Properties]
+  static CustomGeoJSON<T> parseCustom<T extends Properties>(
+      Map<String, dynamic> json,
+      T Function(Object? json) fromJsonT
+  ) {
+    return CustomGeoJSON<T>.fromJson(json, fromJsonT);
   }
 }
 
-class GeoJSONGoogleMapsResult {
+/// A [GeoJSONGoogleMapsResult] is simply a particular [CustomGeoJSONGoogleMapsResult]
+/// using the [SimpleProperties] property object.
+///
+/// Use this in most cases when you do not need to manually override the [Properties]
+///
+class GeoJSONGoogleMapsResult extends CustomGeoJSONGoogleMapsResult<SimpleProperties> {
+  /// Uses the super constructor
+  GeoJSONGoogleMapsResult(super.polygons, super.markers, super.polylines, {
+    super.polygonFeatures = const {},
+    super.markerFeatures = const {},
+    super.lineFeatures = const {},
+  });
+
+  /// The main from Json parser
+  factory GeoJSONGoogleMapsResult.fromJson(Map<String, dynamic> json) {
+    final c = CustomGeoJSONGoogleMapsResult.fromJson(json,
+            (json) => SimpleProperties.fromJson(json as Map<String, dynamic>));
+    return GeoJSONGoogleMapsResult._fromCustom(c);
+  }
+
+  /// A factory for translating between the templated type and this helper type
+  factory GeoJSONGoogleMapsResult._fromCustom(CustomGeoJSONGoogleMapsResult<SimpleProperties> c) {
+    return GeoJSONGoogleMapsResult(c.polygons, c.markers, c.polylines,
+      polygonFeatures: c.polygonFeatures,
+      markerFeatures: c.markerFeatures,
+      lineFeatures: c.lineFeatures,
+    );
+  }
+}
+
+class CustomGeoJSONGoogleMapsResult<T extends Properties> {
   final List<Polygon> polygons;
   final List<Marker> markers;
   final List<Polyline> polylines;
 
   /// A lookup map of the polygon to feature
-  final Map<Polygon, internalModels.Feature> polygonFeatures;
+  final Map<Polygon, internalModels.Feature<T>> polygonFeatures;
 
   /// A lookup map of the marker to feature
-  final Map<Marker, internalModels.Feature> markerFeatures;
+  final Map<Marker, internalModels.Feature<T>> markerFeatures;
 
   /// A lookup map of the line to feature
-  final Map<Polyline, internalModels.Feature> lineFeatures;
+  final Map<Polyline, internalModels.Feature<T>> lineFeatures;
 
-  GeoJSONGoogleMapsResult(this.polygons, this.markers, this.polylines, {
+  CustomGeoJSONGoogleMapsResult(this.polygons, this.markers, this.polylines, {
     this.polygonFeatures = const {},
     this.markerFeatures = const {},
     this.lineFeatures = const {},
   });
 
-  factory GeoJSONGoogleMapsResult.fromJson(Map<String, dynamic> json) {
-    var parsedJson = GeoJSONParser.parse(json);
-    return GeoJSONGoogleMapsResult.fromGeoJson(parsedJson);
+  factory CustomGeoJSONGoogleMapsResult.fromJson(Map<String, dynamic> json,
+      T Function(Object? json) fromJsonT) {
+    var parsedJson = GeoJSONParser.parseCustom<T>(json, fromJsonT);
+    return CustomGeoJSONGoogleMapsResult.fromGeoJson(parsedJson);
   }
 
-  factory GeoJSONGoogleMapsResult.fromGeoJson(GeoJSON parsedJson) {
-    final Map<Polygon, internalModels.Feature> _polygonFeatures = {};
-    final Map<Marker, internalModels.Feature> _markerFeatures = {};
-    final Map<Polyline, internalModels.Feature> _lineFeatures = {};
+  factory CustomGeoJSONGoogleMapsResult.fromGeoJson(CustomGeoJSON<T> parsedJson) {
+    final Map<Polygon, internalModels.Feature<T>> _polygonFeatures = {};
+    final Map<Marker, internalModels.Feature<T>> _markerFeatures = {};
+    final Map<Polyline, internalModels.Feature<T>> _lineFeatures = {};
     var polygons = parsedJson.features
         .where((x) => x.geometry is internalModels.Polygon)
         .where((x) => (x.geometry as internalModels.Polygon)
@@ -84,7 +126,7 @@ class GeoJSONGoogleMapsResult {
         })
         .toList();
 
-    return GeoJSONGoogleMapsResult(polygons, markers, polylines,
+    return CustomGeoJSONGoogleMapsResult(polygons, markers, polylines,
       polygonFeatures: _polygonFeatures,
       markerFeatures: _markerFeatures,
       lineFeatures: _lineFeatures
