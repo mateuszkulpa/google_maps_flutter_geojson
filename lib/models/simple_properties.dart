@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:google_maps_flutter_geojson/models/properties.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'simple_properties.g.dart';
@@ -9,10 +10,10 @@ class SimpleProperties extends Properties {
   final String? description;
 
   SimpleProperties(this.title, this.description, {
-    String? stroke,
+    Color? stroke,
     double? strokeWidth,
     double? strokeOpacity,
-    String? fill,
+    Color? fill,
     double? fillOpacity
   }) : super(stroke, strokeWidth, strokeOpacity, fill, fillOpacity, title);
 

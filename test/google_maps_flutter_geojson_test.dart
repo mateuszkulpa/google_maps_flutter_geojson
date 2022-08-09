@@ -103,10 +103,10 @@ class _CustomProperties extends Properties {
 
   factory _CustomProperties.fromJson(Map<String, dynamic> json) {
     return _CustomProperties(
-        json['stroke'] as String?,
+        null, // stroke
         json['stroke-width'] as double?,
         json['stroke-opacity'] as double?,
-        json['fill'] as String?,
+        null, // fill
         json['fill-opacity'] as double?,
         json['title'] as String?,
         json['description'] as String?,

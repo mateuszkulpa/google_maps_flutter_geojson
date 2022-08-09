@@ -10,9 +10,17 @@ SimpleProperties _$SimplePropertiesFromJson(Map<String, dynamic> json) =>
     SimpleProperties(
       json['title'] as String?,
       json['description'] as String?,
-      stroke: json['stroke'] as String?,
+      stroke: _$JsonConverterFromJson<String, Color>(
+          json['stroke'], const HexColorConverter().fromJson),
       strokeWidth: (json['stroke-width'] as num?)?.toDouble(),
       strokeOpacity: (json['stroke-opacity'] as num?)?.toDouble(),
-      fill: json['fill'] as String?,
+      fill: _$JsonConverterFromJson<String, Color>(
+          json['fill'], const HexColorConverter().fromJson),
       fillOpacity: (json['fill-opacity'] as num?)?.toDouble(),
     );
+
+Value? _$JsonConverterFromJson<Json, Value>(
+  Object? json,
+  Value? Function(Json json) fromJson,
+) =>
+    json == null ? null : fromJson(json as Json);

@@ -2,7 +2,6 @@ library google_maps_flutter_geojson;
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter_geojson/models/simple_properties.dart';
-import 'package:google_maps_flutter_geojson/utils/hex_color.dart';
 import 'package:uuid/uuid.dart';
 import 'models/custom_geojson.dart';
 import 'models/geojson.dart';
@@ -137,7 +136,7 @@ class CustomGeoJSONGoogleMapsResult<T extends Properties> {
     // Set fill color
     Color fillColor = Colors.black.withOpacity(0.15);
     if (feature.properties.fill != null) {
-      fillColor = HexColor(feature.properties.fill!);
+      fillColor = feature.properties.fill!;
     }
     if (feature.properties.fillOpacity != null) {
       fillColor = fillColor.withOpacity(feature.properties.fillOpacity!);
@@ -146,7 +145,7 @@ class CustomGeoJSONGoogleMapsResult<T extends Properties> {
     // Set stroke color
     Color strokeColor = Colors.black.withOpacity(0.5);
     if (feature.properties.stroke != null) {
-      strokeColor = HexColor(feature.properties.stroke!);
+      strokeColor = feature.properties.stroke!;
     }
     if (feature.properties.strokeOpacity != null) {
       strokeColor = strokeColor.withOpacity(feature.properties.strokeOpacity!);
@@ -177,7 +176,7 @@ class CustomGeoJSONGoogleMapsResult<T extends Properties> {
     // Set fill color
     Color fillColor = Colors.black.withOpacity(0.15);
     if (feature.properties.fill != null) {
-      fillColor = HexColor(feature.properties.fill!);
+      fillColor = feature.properties.fill!;
     }
     if (feature.properties.fillOpacity != null) {
       fillColor = fillColor.withOpacity(feature.properties.fillOpacity!);
@@ -186,7 +185,7 @@ class CustomGeoJSONGoogleMapsResult<T extends Properties> {
     // Set stroke color
     Color strokeColor = Colors.black.withOpacity(0.5);
     if (feature.properties.stroke != null) {
-      strokeColor = HexColor(feature.properties.stroke!);
+      strokeColor = feature.properties.stroke!;
     }
     if (feature.properties.strokeOpacity != null) {
       strokeColor = strokeColor.withOpacity(feature.properties.strokeOpacity!);
@@ -233,7 +232,7 @@ class CustomGeoJSONGoogleMapsResult<T extends Properties> {
     // Set color
     Color strokeColor = Colors.black.withOpacity(0.5);
     if (feature.properties.stroke != null) {
-      strokeColor = HexColor(feature.properties.stroke!);
+      strokeColor = feature.properties.stroke!;
     }
     if (feature.properties.strokeOpacity != null) {
       strokeColor = strokeColor.withOpacity(feature.properties.strokeOpacity!);
