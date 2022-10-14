@@ -1,8 +1,6 @@
 library google_maps_flutter_geojson;
 
-import 'package:flutter/material.dart';
 import 'package:google_maps_flutter_geojson/models/simple_properties.dart';
-import 'package:uuid/uuid.dart';
 import 'models/custom_geojson.dart';
 import 'models/geojson.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -53,7 +51,15 @@ class CustomGeoJSONGoogleMapsResult<T extends Properties> {
 
   final List<GoogleMapsParsedFeature<T>> features;
 
-  CustomGeoJSONGoogleMapsResult(this.features);
+  final Map<Polygon, GoogleMapsParsedFeature<T>> polygonToFeature;
+  final Map<Marker, GoogleMapsParsedFeature<T>> markerToFeature;
+  final Map<Polyline, GoogleMapsParsedFeature<T>> polylineToFeature;
+
+  CustomGeoJSONGoogleMapsResult(this.features, {
+    this.polygonToFeature = const {},
+    this.markerToFeature = const {},
+    this.polylineToFeature = const {},
+  });
 
   factory CustomGeoJSONGoogleMapsResult.fromJson(Map<String, dynamic> json,
       T Function(Object? json) fromJsonT) {
@@ -63,6 +69,11 @@ class CustomGeoJSONGoogleMapsResult<T extends Properties> {
 
   factory CustomGeoJSONGoogleMapsResult.fromGeoJson(CustomGeoJSON<T> parsedJson) {
     final List<GoogleMapsParsedFeature<T>> features = [];
+
+    final Map<Polygon, GoogleMapsParsedFeature<T>> _polygonToFeature = {};
+    final Map<Marker, GoogleMapsParsedFeature<T>> _markerToFeature = {};
+    final Map<Polyline, GoogleMapsParsedFeature<T>> _polylineToFeature = {};
+
     for (final feature in parsedJson.features) {
       final List<Polygon> polygons = [];
       final List<Marker> markers = [];
@@ -88,10 +99,19 @@ class CustomGeoJSONGoogleMapsResult<T extends Properties> {
         }
       }
 
+      final f = GoogleMapsParsedFeature(feature.properties, polygons, markers, polylines);
+      polygons.forEach((p) => _polygonToFeature[p] = f);
+      markers.forEach((p) => _markerToFeature[p] = f);
+      polylines.forEach((p) => _polylineToFeature[p] = f);
+
       features.add(GoogleMapsParsedFeature(feature.properties, polygons, markers, polylines));
     }
 
-    return CustomGeoJSONGoogleMapsResult(features);
+    return CustomGeoJSONGoogleMapsResult(features,
+      polygonToFeature: _polygonToFeature,
+      markerToFeature: _markerToFeature,
+      polylineToFeature: _polylineToFeature,
+    );
   }
 
 
