@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_maps_flutter_geojson/google_maps_flutter_geojson.dart';
@@ -81,8 +82,22 @@ void main() {
 
     final j = jsonDecode(customProperties);
     final result = CustomGeoJSONGoogleMapsResult<_CustomProperties>.fromJson(j, (json) => _CustomProperties.fromJson(json as Map<String, dynamic>));
-    final features = result.polygonFeatures[result.polygonFeatures.keys.first];
-    expect(features!.properties.code, equals(12));
+    final features = result.features.first;
+    expect(features.properties.code, equals(12));
+    expect(features.polygons.length, equals(11));
+  });
+
+  test('Parse multipolygon with multiple polygons and holes', () {
+    final inputString = File('json/multipolygon_with_holes.json')
+        .readAsStringSync();
+    final j = jsonDecode(inputString);
+    final result = GeoJSONGoogleMapsResult.fromJson(j);
+
+    final polygons = result.polygons;
+    expect(result.features.any((f) => f.properties.title?.isEmpty ?? true), equals(false));
+    expect(result.features.length, equals(8));
+    expect(polygons.length, equals(36));
+    expect(polygons.expand((p) => p.holes).length, equals(6));
   });
 }
 
