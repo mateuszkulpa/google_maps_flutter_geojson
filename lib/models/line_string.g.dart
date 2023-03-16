@@ -6,11 +6,10 @@ part of 'line_string.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-LineString _$LineStringFromJson(Map<String, dynamic> json) {
-  return LineString(
+LineString _$LineStringFromJson(Map<String, dynamic> json) => LineString(
       json['type'] as String,
-      (json['coordinates'] as List)
-          ?.map(
-              (e) => (e as List)?.map((e) => (e as num)?.toDouble())?.toList())
-          ?.toList());
-}
+      (json['coordinates'] as List<dynamic>)
+          .map((e) =>
+              (e as List<dynamic>).map((e) => (e as num).toDouble()).toList())
+          .toList(),
+    );

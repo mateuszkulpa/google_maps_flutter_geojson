@@ -1,17 +1,18 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'feature.dart';
+part of 'custom_geojson.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-Feature<T> _$FeatureFromJson<T extends Properties>(
+CustomGeoJSON<T> _$CustomGeoJSONFromJson<T extends Properties>(
   Map<String, dynamic> json,
   T Function(Object? json) fromJsonT,
 ) =>
-    Feature<T>(
-      json['type'] as String,
-      fromJsonT(json['properties']),
-      Geometry.fromJson(json['geometry'] as Map<String, dynamic>),
+    CustomGeoJSON<T>(
+      (json['features'] as List<dynamic>)
+          .map((e) => Feature<T>.fromJson(
+              e as Map<String, dynamic>, (value) => fromJsonT(value)))
+          .toList(),
     );

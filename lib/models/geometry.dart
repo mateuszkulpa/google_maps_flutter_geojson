@@ -1,5 +1,3 @@
-
-
 import 'package:google_maps_flutter_geojson/models/models.dart';
 
 abstract class Geometry {
@@ -17,7 +15,9 @@ abstract class Geometry {
       case 'LineString':
         return LineString.fromJson(json);
       case 'Polygon':
-        return Polygon.fromJson(json); 
+        return Polygon.fromJson(json);
+      case 'MultiPolygon':
+        return MultiPolygon.fromJson(json);
       default:
         throw Exception('Cannot parse geojson');
     }

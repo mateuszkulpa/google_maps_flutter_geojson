@@ -1,24 +1,40 @@
+import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
-part 'properties.g.dart';
 
-@JsonSerializable(createToJson: false)
-class Propetries {
-  @JsonKey(name: 'name')
-  final String name;
-  @JsonKey(name: 'stroke')
-  final String stroke;
+abstract class Properties {
+  final String? title;
+  @HexColorConverter()
+  final Color? stroke;
   @JsonKey(name: 'stroke-width')
-  final double strokeWidth;
+  final double? strokeWidth;
   @JsonKey(name: 'stroke-opacity')
-  final double strokeOpacity;
-  @JsonKey(name: 'fill')
-  final String fill;
+  final double? strokeOpacity;
+  @HexColorConverter()
+  final Color? fill;
   @JsonKey(name: 'fill-opacity')
-  final double fillOpacity;
+  final double? fillOpacity;
 
-  Propetries(this.name, this.stroke, this.strokeWidth, this.strokeOpacity, this.fill,
-      this.fillOpacity);
+  Properties(this.stroke, this.strokeWidth, this.strokeOpacity, this.fill, this.fillOpacity, this.title);
 
-  factory Propetries.fromJson(Map<String, dynamic> json) =>
-      _$PropetriesFromJson(json);
+
+}
+
+class HexColorConverter implements JsonConverter<Color, String> {
+  const HexColorConverter();
+
+  @override
+  Color fromJson(String json) {
+    var hexColor = json.toUpperCase().replaceAll("#", "");
+    if (hexColor.length == 6) {
+      hexColor = "FF" + hexColor;
+    }
+    final c = int.parse(hexColor, radix: 16);
+    return Color(c);
+  }
+
+  @override
+  String toJson(Color object) {
+    throw UnimplementedError();
+  }
+
 }
